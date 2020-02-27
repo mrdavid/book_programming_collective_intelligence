@@ -49,6 +49,7 @@ critics = {
     },
     'Toby': {'Snakes on a Plane': 4.5, 'You, Me and Dupree': 1.0,
              'Superman Returns': 4.0},
+    'empty': {},
 }
 # Above dictionary copied from https://github.com/arthur-e/Programming-Collective-Intelligence/blob/master/chapter2/recommendations.py
 
@@ -107,3 +108,27 @@ def sim_pearson(prefs, p1, p2):
 
 print("Pearson score")
 print(sim_pearson(critics, 'Lisa Rose', 'Gene Seymour'))
+
+# Tanimoto score
+# See https://en.wikipedia.org/wiki/Jaccard_index#Tanimoto_similarity_and_distance
+# Implement Jaccard Index instead
+def sim_jaccard(prefs, p1, p2):
+    # Get the list of mutually rate items
+    si = {}
+    for item in prefs[p1]:
+        if item in prefs[p2]:
+            si[item] = 1
+
+    p1_A_p2 = len(si)
+    cardinality_p1 = len(prefs[p1])
+    cardinality_p2 = len(prefs[p2])
+
+    if cardinality_p1 == 0 and cardinality_p2 == 0:
+        return 0
+
+    return 1.0 * p1_A_p2 / (cardinality_p1 + cardinality_p2 - p1_A_p2)
+
+print("Jaccard index")
+print(sim_jaccard(critics, 'Lisa Rose', 'Gene Seymour'))
+print(sim_jaccard(critics, 'Lisa Rose', 'Michael Phillips'))
+print(sim_jaccard(critics, 'Lisa Rose', 'empty'))
